@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ 	 <meta charset="UTF-8"></meta>
+  	<title>reviewbook(log in)</title>
+<style>
+.appu{
+    width: 270px;
+    height: 340px;
+    padding: 10px 10px;
+   margin:60px 200px 30px 400px;
+    border: 1px solid orange;
+text-align: center;
+background-color:rgba(255,255,255,0.4);
+}
+body{
+background-image: url("http://2.bp.blogspot.com/-yZvAv4FFBdQ/VE7yqDyBN4I/AAAAAAAADRE/H_ySAv4Zfgk/s1600/background.jpg");
+background-size: cover;
+    background-repeat: no-repeat;
+}
+
+h1 {color: #202217;
+}
+span{
+color: #651DE2;
+}
+
+h1{
+ text-align: center;
+font-family: "Comic Sana MS" , cursive, sans-serif;
+}
+ input {
+      border: 0;
+      padding: 10px;
+      font-size: 15px;
+    }
+input[type="submit"] {
+      background: green;
+      color: white;
+    }
+
+</style>
+
+</head>
+<body>
+<header>
+
+
+</header>
+    <div class = "appu">
+    <h2>log In</h2>
+<div><br>
+    <form method="post">
+{% csrf_token %}
+      <div><br>
+
+          <input id="username" type="text" name="username"placeholder="Username" value={{ username }} >
+      </div><br>
+
+      <div><br>
+
+          <input id="password" type="password" name="password"placeholder="Password" value={{ password }} >
+      </div><br>
+
+      <input type="submit" value="Log In">
+
+    </form>
+    <div><h4>Don't have an account? </h4><a href="/signup/"> Signup</a> </div>
+</div><br>
+    </div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"></meta>
+<style>
+.appu{
+    width: 300px;
+    height: 535px;
+    padding: 20px;
+    border: 1px solid blue;
+background-color:rgba(255,255,255,0.4);
+}
+
+h1 {color: black;
+}
+span{
+color: blue
+}
+h1 {
+    text-align: center;
+    color : white;
+}
+
+body {
+      text-align: center;
+      background: url("https://www.planwallpaper.com/static/images/518079-background-hd.jpg");
+      background-size: cover;
+      background-position: center;
+      color:white
+    }
+
+
+ input {
+      border: 0;
+      padding: 10px;
+      font-size: 15px;
+    }
+input[type="submit"] {
+      background: green;
+      color: white;
+    }
+
+</style>
+
+</head>
+ <body>
+
+ <header>
+
+     <h1>ISTACLONE</h1>
+            </header>
+<div class = "appu">
+<h2>SIGN UP</h2>
+
+<h3>It's free and always be free.</h3>
+ <div><br>
+
+<form method="post">
+{% csrf_token %}
+            <div><br>
+
+                <input id="username" type="text"name="username"placeholder="Username" value={{ username }} >
+            </div><br>
+
+            <div><br>
+
+                <input id="name" type="text"name="name"placeholder="Full name" value={{ name }} >
+            </div><br>
+
+            <div><br>
+
+                <input id="email" type="text"name="email" placeholder="Email" value={{ email }} >
+            </div><br>
+
+            <div><br>
+
+                <input id="password" type="password" name="password" placeholder="Password" value={{ password }}>
+            </div><br>
+                <input type="submit" value="Sign Up">
+        </form>
+
+
+    </div><br>
+
+    <div><h4>Already a user? </h4><a href="login/"> Login</a> </div>
+
+</div>
+</body>
+    </html>
