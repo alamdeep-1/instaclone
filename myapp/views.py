@@ -4,15 +4,19 @@ from __future__ import unicode_literals
 import datetime
 from django.shortcuts import render, redirect
 from forms import SignUpForm, LoginForm, PostForm, LikeForm, CommentForm
-from models import UserModel, SessionToken, PostModel, LikeModel, CommentModel
+from models import UserModel, SessionToken, PostModel, LikeModel, CommentModel ,CategoryModel
 from django.contrib.auth.hashers import make_password, check_password
 from datetime import timedelta
 from django.utils import timezone
+from clarifai.rest import ClarifaiApp
 from intrest.settings import BASE_DIR
 
 from imgurpython import ImgurClient
 
+clarafai_api_key='cd9af066bd5b48bb867c581bb57b7ca7'
 
+IMGUR_CLIENT_ID = "9c9bf0c17f4ac16"
+IMGUR_CLIENT_SECRET = "cd2f3f14d28677368f0c26ee558ff6841e6e098a"
 # Create your views here.
 
 def signup_view(request):
@@ -61,6 +65,28 @@ def login_view(request):
     return render(request, 'login.html', response_data)
 
 
+def add_category(post):
+    app = ClarifaiApp(api_key=clarafai_api_key)
+    model = app.models.get("general-v1.3")
+    response = model.predict_by_url(url=post.image_url)
+
+    if response["status"]["code"] == 10000:
+        if response["outputs"]:
+            if response["outputs"][0]["data"]:
+                if response["outputs"][0]["data"]["concepts"]:
+                    for index in range(0, len(response["outputs"][0]["data"]["concepts"])):
+                        category = CategoryModel(post=post, category_text = response["outputs"][0]["data"]["concepts"][index]["name"])
+                        category.save()
+                else:
+                    print "No Concepts List Error"
+            else:
+                print "No Data List Error"
+        else:
+            print "No Outputs List Error"
+    else:
+        print "Response Code Error"
+
+
 def post_view(request):
     user = check_validation(request)
 
@@ -75,11 +101,14 @@ def post_view(request):
 
                 path = str(BASE_DIR + post.image.url)
 
-                client = ImgurClient( '9c9bf0c17f4ac16', 'cd2f3f14d28677368f0c26ee558ff6841e6e098a')
+                client = ImgurClient( IMGUR_CLIENT_ID,IMGUR_CLIENT_SECRET)
                 post.image_url = client.upload_from_path(path, anon=True)['link']
                 post.save()
 
+                add_category(post)
+
                 return redirect('/feed/')
+
 
         else:
             form = PostForm()
@@ -92,7 +121,7 @@ def feed_view(request):
     user = check_validation(request)
     if user:
 
-        posts = PostModel.objects.all().order_by('created_on')
+        posts = PostModel.objects.all().order_by('-created_on')
 
         for post in posts:
             existing_like = LikeModel.objects.filter(post_id=post.id, user=user).first()
@@ -142,8 +171,27 @@ def check_validation(request):
     if request.COOKIES.get('session_token'):
         session = SessionToken.objects.filter(session_token=request.COOKIES.get('session_token')).first()
         if session:
-            time_to_live = session.created_on + timedelta(days=1)
+            time_to_live = session.created_on + timedelta(days=10)
             if time_to_live > timezone.now():
                 return session.user
     else:
         return None
+
+
+def new(request):
+    user = check_validation(request)
+    if user:
+
+        posts = PostModel.objects.all().order_by('-created_on')
+
+        for post in posts:
+            existing_like = LikeModel.objects.filter(post_id=post.id, user=user).first()
+            if existing_like:
+                post.has_liked = True
+
+        return render(request, 'new.html', {'posts': posts})
+    else:
+
+        return redirect('/login/')
+
+

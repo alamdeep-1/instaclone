@@ -5,30 +5,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-    body {
-      background: url("https://s3.amazonaws.com/spoonflower/public/design_thumbnails/0144/2150/rrCt-Background-cream_shop_preview.jpg");
-      background-size: cover;
-      background-position: center;
-      color:black
-    }
-    </style>
 
 </head>
 <body>
 <center>
-    <form method="post" action="/post/">
-        {% csrf_token %}
-        <input type="submit" class="btn-default btn" value="Create Post">
-    </form>
-
 
     {% for post in posts %}
 
 
         <h3> Posted by: {{ post.user.username }} </h3>
         <p>[{{ post.created_on }}]</p>
-        <img style="display:inline-block; width:700px; height:420px;"
+        <img style="display:inline-block; width:640px; height:640px;"
              src="{{ post.image_url }}" /><br>
         <span  style="display:inline-block;">{{ post.caption }}</span><br/><br/>
         <div style="display:inline-block">
@@ -68,6 +55,8 @@
                 <p><b>{{ comment.user.username }} [{{ comment.created_on }}]:</b> {{ comment.comment_text }}</p>
             {% endfor %}
         </div>
+
+
 
     {% endfor %}
 </center>

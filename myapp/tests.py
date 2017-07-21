@@ -1,6 +1,13 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from clarifai import rest
+from clarifai.rest import ClarifaiApp
 
-from django.test import TestCase
+import clarifai
+from clarifai.rest import ClarifaiApp
 
-# Create your tests here.
+app = ClarifaiApp(api_key='cd9af066bd5b48bb867c581bb57b7ca7')
+
+
+model = app.models.get('general-v1.3')
+
+a=model.predict_by_url(url='https://samples.clarifai.com/metro-north.jpg')
+print a['outputs'][0]['id']
