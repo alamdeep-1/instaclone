@@ -6,23 +6,36 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
-    body {
-      background: url("https://s3.amazonaws.com/spoonflower/public/design_thumbnails/0144/2150/rrCt-Background-cream_shop_preview.jpg");
-      background-size: cover;
-      background-position: center;
-      color:black
-    }
+        body {
+        background: url("https://s3.amazonaws.com/spoonflower/public/design_thumbnails/0144/2150/rrCt-Background-cream_shop_preview.jpg");
+        background-size: cover;
+        background-position: center;
+        color:black
+        }
     </style>
 
 </head>
 <body>
 <center>
+
+        <form methot = "get" action = "{% url 'logout' %}">
+            <button type ="submit"  style="float: right;
+             color:white;
+             background-color: red;
+             padding: 10px 30px;
+             font-size: 16px; ">
+                Logout
+            </button>
+
+        </form>
+
+
     <form method="post" action="/post/">
         {% csrf_token %}
         <input type="submit" class="btn-default btn" value="Create Post">
     </form>
 
-     <a href="{% url 'logout' %}"> Log Out </a>
+
 
 
     {% for post in posts %}
