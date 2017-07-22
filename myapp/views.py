@@ -171,7 +171,7 @@ def check_validation(request):
     if request.COOKIES.get('session_token'):
         session = SessionToken.objects.filter(session_token=request.COOKIES.get('session_token')).first()
         if session:
-            time_to_live = session.created_on + timedelta(days=10)
+            time_to_live = session.created_on + timedelta(days=2)
             if time_to_live > timezone.now():
                 return session.user
     else:
@@ -195,3 +195,8 @@ def new(request):
         return redirect('/login/')
 
 
+def logout_view(request):
+    request.session.modified = True
+    response = redirect("/login/")
+    response.delete_cookie(key="session_token")
+    return response

@@ -16,7 +16,7 @@ Including another URLconf
 
 from django.conf.urls import url
 from django.contrib import admin
-from myapp.views import signup_view, login_view, feed_view, post_view, like_view, comment_view,new
+from myapp.views import signup_view, login_view, feed_view, post_view, like_view, comment_view,new,logout_view
 
 urlpatterns = [
     url('post/', post_view),
@@ -26,5 +26,6 @@ urlpatterns = [
     url('admin/', admin.site.urls),
     url('new', new),
     url('login/', login_view),
-    url('', signup_view)
+    url('', signup_view),
+    url('logout', logout_view, name="logout"),
 ]
